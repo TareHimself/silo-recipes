@@ -27,4 +27,10 @@ Recipes here depend on each other the same way. To build one from a checkout:
 silo build recipes/zlib/1.3.1
 ```
 
+Before pushing, format and check the recipes, so the same recipe always has the same text:
+
+```
+uvx ruff format . && uvx ruff check .
+```
+
 A new version is a new folder. A folder that has been pushed is not edited again, except to fix the recipe itself.
