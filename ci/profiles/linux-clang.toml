@@ -1,0 +1,13 @@
+# A configuration CI builds. The runner's compiler has to be this kind and generation:
+# the major version for gcc and clang, 14.4x for MSVC.
+[settings]
+os = "linux"
+arch = "x86_64"
+cppstd = 17
+
+[compiler]
+kind = "clang"
+executable = "clang"
+cxx_executable = "clang++"
+version = "18"
+target = "x86_64-linux-gnu"
