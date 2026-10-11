@@ -1,0 +1,4 @@
+# This repository is a registry: recipes/<name>/<version>/silopkg.py
+[[registry]]
+name = "silo-recipes"
+path = "."
