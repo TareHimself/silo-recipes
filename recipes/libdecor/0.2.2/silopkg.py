@@ -64,7 +64,5 @@ class Libdecor(SiloPackage):
             content=[PLUGINS],
             requires=["wayland::wayland-client"],
             system_libs=["m"],
-            pkg_config="libdecor-0",
-            pkg_config_variables={"plugindir": "${prefix}/" + PLUGINS},
         )
         return Package(components=[library], licenses=["LICENSE"])

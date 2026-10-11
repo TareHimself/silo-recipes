@@ -53,15 +53,12 @@ class Wayland(SiloPackage[WaylandOptions]):
         return component
 
     def package(self):
-        data = {"pkgdatadir": "${prefix}/share/wayland"}
         scanner = Component(
             "wayland-scanner",
             executables=["wayland-scanner"],
             content=["share/wayland"],
-            pkg_config_variables=data | {"wayland_scanner": "${prefix}/bin/wayland-scanner"},
         )
         client = self._library("wayland-client", ["libffi"])
-        client.pkg_config_variables = data
         components = [
             client,
             self._library("wayland-server", ["libffi"]),

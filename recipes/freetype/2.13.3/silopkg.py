@@ -41,8 +41,6 @@ class Freetype(SiloPackage):
                     headers=["include/freetype2"],
                     static_libs=["freetype"],
                     requires=["zlib"],
-                    pkg_config="freetype2",
-                    pkg_config_version="26.2.20",
                 )
             ],
             licenses=["LICENSE.TXT", "docs/FTL.TXT"],

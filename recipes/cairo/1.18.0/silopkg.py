@@ -24,6 +24,12 @@ class Cairo(SiloPackage):
             commit="3909090108bb2db55330e3eb148aebe664735363",
         )
 
+    def patch(self, src):
+        # freetype's own pkg-config file counts in library numbers. silo's says the
+        # release, so the checks are written in releases (9.7.3 is 2.1.9, 25.0.19 is 2.13.0).
+        src.replace("meson.build", "version = '>= 9.7.3'", "version = '>= 2.1.9'")
+        src.replace("meson.build", "version = '>= 25.0.19'", "version = '>= 2.13.0'")
+
     def deps(self):
         for dependency in (
             "pixman@0.43.4",
@@ -37,7 +43,7 @@ class Cairo(SiloPackage):
         self.tool("pkgconf@3")
 
     def generate(self):
-        PkgConfigDeps(self).generate()
+        PkgConfigDeps(self, aliases={"freetype2": "freetype::freetype"}).generate()
         meson = MesonGenerator(self)
         for feature in ("fontconfig", "freetype", "png", "zlib"):
             meson.set_option(feature, "enabled")

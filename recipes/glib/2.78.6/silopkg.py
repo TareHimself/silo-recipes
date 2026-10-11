@@ -34,7 +34,7 @@ class Glib(SiloPackage):
         self.tool("pkgconf@3")
 
     def generate(self):
-        PkgConfigDeps(self).generate()
+        PkgConfigDeps(self, aliases={"libpcre2-8": "pcre2::pcre2-8"}).generate()
         meson = MesonGenerator(self)
         # glib compiles these folders in. They belong to the machine, not to this package.
         meson.set_builtin("localstatedir", "/var")
@@ -58,7 +58,6 @@ class Glib(SiloPackage):
         meson.install()
 
     def package(self):
-        tools = {tool.replace("-", "_"): f"${{prefix}}/bin/{tool}" for tool in TOOLS}
         glib = Component(
             "glib-2.0",
             headers=["include/glib-2.0", "lib/glib-2.0/include"],
@@ -66,7 +65,6 @@ class Glib(SiloPackage):
             executables=TOOLS,
             requires=["pcre2"],
             system_libs=["m", "pthread"],
-            pkg_config_variables=tools,
         )
         gmodule = Component("gmodule-2.0", static_libs=["gmodule-2.0"], requires=["glib::glib-2.0"])
         gobject = Component(

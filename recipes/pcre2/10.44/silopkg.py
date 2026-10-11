@@ -36,6 +36,5 @@ class Pcre2(SiloPackage):
             headers=["include"],
             static_libs=["pcre2-8"],
             defines=["PCRE2_STATIC"],
-            pkg_config="libpcre2-8",
         )
         return Package(components=[library], licenses=["LICENCE"])

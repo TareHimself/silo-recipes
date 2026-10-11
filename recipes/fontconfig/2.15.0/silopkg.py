@@ -14,6 +14,11 @@ class Fontconfig(SiloPackage):
             sha256="63a0658d0e06e0fa886106452b58ef04f21f58202ea02a94c39de0d3335d7c0e",
         )
 
+    def patch(self, src):
+        # freetype's own pkg-config file counts in library numbers. silo's says the
+        # release, so the checks are written in releases (21.0.15 is 2.8.1).
+        src.replace("meson.build", "freetype_req = '>= 21.0.15'", "freetype_req = '>= 2.8.1'")
+
     def deps(self):
         self.dep("freetype@2.13.3")
         self.dep("expat@2.6.4")
@@ -22,7 +27,7 @@ class Fontconfig(SiloPackage):
         self.tool("pkgconf@3")
 
     def generate(self):
-        PkgConfigDeps(self).generate()
+        PkgConfigDeps(self, aliases={"freetype2": "freetype::freetype"}).generate()
         meson = MesonGenerator(self)
         # Fonts and their configuration belong to the machine, not to this package
         meson.set_builtin("sysconfdir", "/etc")

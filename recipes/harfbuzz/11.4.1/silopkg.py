@@ -13,13 +13,20 @@ class Harfbuzz(SiloPackage):
             commit="6b285e6e94f0af10c6aa6d31325fd6746aeb2dfe",
         )
 
+    def patch(self, src):
+        # freetype's own pkg-config file counts in library numbers. silo's says the
+        # release, so the checks are written in releases (12.0.6 is 2.4.2).
+        src.replace(
+            "meson.build", "freetype_min_version = '>= 12.0.6'", "freetype_min_version = '>= 2.4.2'"
+        )
+
     def deps(self):
         self.dep("freetype@2.13.3")
         self.tool("meson@1")
         self.tool("pkgconf@3")
 
     def generate(self):
-        PkgConfigDeps(self).generate()
+        PkgConfigDeps(self, aliases={"freetype2": "freetype::freetype"}).generate()
         meson = MesonGenerator(self)
         meson.set_option("freetype", "enabled")
         for feature in ("glib", "gobject", "cairo", "chafa", "icu", "tests", "docs"):

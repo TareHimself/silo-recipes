@@ -44,6 +44,5 @@ class Xkbcommon(SiloPackage):
             "xkbcommon",
             headers=["include"],
             static_libs=["xkbcommon"],
-            pkg_config="xkbcommon",
         )
         return Package(components=[library], licenses=["LICENSE"])

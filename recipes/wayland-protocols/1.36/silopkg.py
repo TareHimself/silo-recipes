@@ -32,6 +32,5 @@ class WaylandProtocols(SiloPackage):
         protocols = Component(
             "wayland-protocols",
             content=["share/wayland-protocols"],
-            pkg_config_variables={"pkgdatadir": "${prefix}/share/wayland-protocols"},
         )
         return Package(components=[protocols], licenses=["COPYING"])
