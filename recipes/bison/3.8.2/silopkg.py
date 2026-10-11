@@ -17,7 +17,7 @@ class Bison(SiloPackage):
         )
 
     def deps(self):
-        self.tool("m4@1.4.19")
+        self.tool("m4@1.4.19", transitive=True)
 
     def build(self):
         self.build_dir.mkdir(parents=True, exist_ok=True)
@@ -35,6 +35,7 @@ class Bison(SiloPackage):
                 "--disable-nls",
             ],
             cwd=self.build_dir,
+            env={"M4": "m4"},
         )
         self.run(["make", "-j8"], cwd=self.build_dir)
         scratch = self.build_dir / "scratch"
