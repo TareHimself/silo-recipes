@@ -16,10 +16,11 @@ class Libvpx(SiloPackage):
 
     def build(self):
         # Upstream builds with configure and make, which silo cannot drive
+        # Conan's recipe does not know newer MSVC. A C library from 194 links fine.
+        windows = self.profile.settings.os is Platform.Windows
         ConanInstall(self).install(
             "libvpx/1.14.1#18d555b919f7824741bf2f9422f09a36",
-            # Conan's recipe does not know newer MSVC. A C library from 194 links fine.
-            settings={"compiler.version": "194"},
+            settings={"compiler.version": "194"} if windows else None,
         )
 
     def package(self):
