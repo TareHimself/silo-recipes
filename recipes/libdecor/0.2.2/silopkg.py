@@ -38,7 +38,6 @@ class Libdecor(SiloPackage):
         # For wayland-scanner, which turns protocol descriptions into code
         self.tool("wayland@1.22.0")
         self.tool("meson@1")
-        self.tool("ninja@1.13")
         self.tool("pkgconf@3")
 
     def generate(self):

@@ -31,7 +31,6 @@ class Glib(SiloPackage):
         self.dep("pcre2@10.44")
         self.dep("zlib@1.3.1")
         self.tool("meson@1")
-        self.tool("ninja@1.13")
         self.tool("pkgconf@3")
 
     def generate(self):

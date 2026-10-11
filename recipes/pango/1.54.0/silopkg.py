@@ -35,7 +35,6 @@ class Pango(SiloPackage):
         ):
             self.dep(dependency)
         self.tool("meson@1")
-        self.tool("ninja@1.13")
         self.tool("pkgconf@3")
 
     def generate(self):

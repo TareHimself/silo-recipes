@@ -37,7 +37,6 @@ class Msdfgen(SiloPackage[MsdfgenOptions]):
         if self.options.with_svg:
             self.dep("tinyxml2@11.0.0")
         self.tool("cmake@4.3")
-        self.tool("ninja@1.13")
 
     def generate(self):
         deps = CMakeDeps(self)

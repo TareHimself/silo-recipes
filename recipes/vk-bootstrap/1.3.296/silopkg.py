@@ -15,7 +15,6 @@ class VkBootstrap(SiloPackage):
     def deps(self):
         self.dep("vulkan-headers@1.3.296")
         self.tool("cmake@4.3")
-        self.tool("ninja@1.13")
 
     def generate(self):
         deps = CMakeDeps(self)

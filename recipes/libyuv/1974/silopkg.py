@@ -22,7 +22,6 @@ class Libyuv(SiloPackage):
 
     def deps(self):
         self.tool("cmake@4.3")
-        self.tool("ninja@1.13")
 
     def generate(self):
         toolchain = CMakeGenerator(self)

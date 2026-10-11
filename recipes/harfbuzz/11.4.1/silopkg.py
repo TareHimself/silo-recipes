@@ -16,7 +16,6 @@ class Harfbuzz(SiloPackage):
     def deps(self):
         self.dep("freetype@2.13.3")
         self.tool("meson@1")
-        self.tool("ninja@1.13")
         self.tool("pkgconf@3")
 
     def generate(self):

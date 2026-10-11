@@ -19,7 +19,6 @@ class Fontconfig(SiloPackage):
         self.dep("expat@2.6.4")
         self.tool("gperf@3.1")
         self.tool("meson@1")
-        self.tool("ninja@1.13")
         self.tool("pkgconf@3")
 
     def generate(self):

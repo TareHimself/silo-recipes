@@ -17,7 +17,6 @@ class Libpng(SiloPackage):
     def deps(self):
         self.dep("zlib@1.3.1")
         self.tool("cmake@4.3")
-        self.tool("ninja@1.13")
 
     def generate(self):
         deps = CMakeDeps(self)

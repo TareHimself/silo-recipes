@@ -15,7 +15,6 @@ class WaylandProtocols(SiloPackage):
 
     def deps(self):
         self.tool("meson@1")
-        self.tool("ninja@1.13")
 
     def generate(self):
         meson = MesonGenerator(self)

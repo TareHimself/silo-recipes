@@ -24,7 +24,6 @@ class Wayland(SiloPackage[WaylandOptions]):
         self.dep("libffi@3.4.6")
         self.dep("expat@2.6.4")
         self.tool("meson@1")
-        self.tool("ninja@1.13")
         self.tool("pkgconf@3")
 
     def generate(self):
