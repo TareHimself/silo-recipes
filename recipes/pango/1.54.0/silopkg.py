@@ -24,6 +24,9 @@ class Pango(SiloPackage):
             build_file, "'-DLIBDIR=\"@0@\"'.format(pango_libdir)", "'-DLIBDIR=\"/usr/lib\"'"
         )
 
+        # clang 23 counts the unused parent class variable of glib's type macros under this
+        src.replace("meson.build", "'-Werror=unused-but-set-variable',", "")
+
     def deps(self):
         for dependency in (
             "glib@2.78.6",
