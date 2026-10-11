@@ -15,7 +15,7 @@ profiles = sorted(Path("ci/profiles").glob("*.toml"))
 command = ["silo", "affected", ".", *sys.argv[1:]]
 for profile in profiles:
     command += ["--profile", str(profile)]
-affected = json.loads(subprocess.run(command, capture_output=True, text=True, check=True).stdout)
+affected = json.loads(subprocess.run(command, stdout=subprocess.PIPE, text=True, check=True).stdout)
 
 matrix = []
 for profile in profiles:
