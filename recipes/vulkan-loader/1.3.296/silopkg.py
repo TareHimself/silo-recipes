@@ -1,4 +1,5 @@
 from silo import Component, Package, SiloPackage
+from silo.enums import Platform
 from silo.tools.cmake import CMakeBuild, CMakeDeps, CMakeGenerator
 
 
@@ -24,6 +25,7 @@ class VulkanLoader(SiloPackage):
     def deps(self):
         self.dep("vulkan-headers@1.3.296")
         self.tool("cmake@4.3")
+        self.tool("pkgconf@3")
         self.tool("ninja@1.13")
 
     def generate(self):
@@ -32,6 +34,10 @@ class VulkanLoader(SiloPackage):
         deps.generate()
         toolchain = CMakeGenerator(self)
         toolchain.add_cache_bool("BUILD_TESTS", False)
+        toolchain.add_cache_string("SYSCONFDIR", "/etc")
+        # The machine's own loader is the one that runs, so window systems are not built in
+        for system in ("XCB", "XLIB", "WAYLAND"):
+            toolchain.add_cache_bool(f"BUILD_WSI_{system}_SUPPORT", False)
         toolchain.generate()
 
     def build(self):
@@ -42,6 +48,7 @@ class VulkanLoader(SiloPackage):
 
     def package(self):
         # Drivers find the loader by this file name, so it is always a shared library
-        loader = Component("vulkan-loader", shared_libs=["vulkan-1"], requires=["vulkan-headers"])
+        library = "vulkan-1" if self.profile.settings.os is Platform.Windows else "vulkan"
+        loader = Component("vulkan-loader", shared_libs=[library], requires=["vulkan-headers"])
         # The graphics driver installs the loader that matches it
         return Package(components=[loader], licenses=["LICENSE.txt"], system_runtime=True)
