@@ -59,4 +59,6 @@ class Glfw(SiloPackage):
                 "wayland::wayland-egl",
                 "xkbcommon",
             ]
+        else:
+            library.frameworks += ["Cocoa", "IOKit", "CoreFoundation", "QuartzCore"]
         return Package(components=[library], licenses=["LICENSE.md"])

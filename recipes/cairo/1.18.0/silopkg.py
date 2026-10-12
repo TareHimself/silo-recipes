@@ -1,4 +1,5 @@
 from silo import Component, Package, SiloPackage
+from silo.enums import Platform
 from silo.tools.meson import MesonBuild, MesonGenerator
 from silo.tools.pkgconfig import PkgConfigDeps
 
@@ -65,6 +66,9 @@ class Cairo(SiloPackage):
             requires=["pixman", "freetype", "fontconfig", "libpng", "zlib"],
             system_libs=["m", "pthread", "dl"],
         )
+        if self.profile.settings.os is Platform.Darwin:
+            # cairo also draws through Quartz there
+            cairo.frameworks += ["CoreFoundation", "CoreGraphics", "CoreText"]
         features = [
             Component(name, requires=["cairo::cairo", *requires])
             for name, requires in FEATURES.items()

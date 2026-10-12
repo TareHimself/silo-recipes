@@ -80,13 +80,19 @@ class Glib(SiloPackage):
 
     def package(self):
         windows = self.profile.settings.os is Platform.Windows
+        macos = self.profile.settings.os is Platform.Darwin
+        system_libs = ["ws2_32", "winmm"] if windows else ["m", "pthread"]
+        if macos:
+            # Character set conversion is in the C library on Linux and a library here
+            system_libs.append("iconv")
         glib = Component(
             "glib-2.0",
             headers=["include/glib-2.0", "lib/glib-2.0/include"],
             static_libs=["glib-2.0"],
             executables=TOOLS,
             requires=["pcre2", "proxy-libintl"] if self.needs_intl else ["pcre2"],
-            system_libs=["ws2_32", "winmm"] if windows else ["m", "pthread"],
+            system_libs=system_libs,
+            frameworks=["CoreFoundation", "Foundation", "Carbon"] if macos else [],
         )
         gmodule = Component("gmodule-2.0", static_libs=["gmodule-2.0"], requires=["glib::glib-2.0"])
         gobject = Component(
@@ -98,5 +104,6 @@ class Glib(SiloPackage):
             static_libs=["gio-2.0"],
             requires=["glib::gobject-2.0", "glib::gmodule-2.0", "zlib"],
             system_libs=["shlwapi", "dnsapi", "iphlpapi", "ws2_32"] if windows else ["resolv"],
+            frameworks=["AppKit"] if macos else [],
         )
         return Package(components=[glib, gmodule, gobject, gio], licenses=["COPYING"])
