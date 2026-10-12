@@ -1,6 +1,7 @@
 import shutil
 
 from silo import Component, Package, SiloPackage
+from silo.enums import Platform
 
 
 class Bison(SiloPackage):
@@ -8,6 +9,8 @@ class Bison(SiloPackage):
 
     name = "bison"
     version = "3.8.2"
+    # Built with configure and make, which need a Unix shell
+    platforms = (Platform.Linux, Platform.Darwin)
     languages = ("c",)
 
     def source(self, src):

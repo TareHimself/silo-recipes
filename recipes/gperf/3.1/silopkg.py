@@ -1,4 +1,5 @@
 from silo import Component, Package, SiloPackage
+from silo.enums import Platform
 
 
 class Gperf(SiloPackage):
@@ -6,6 +7,8 @@ class Gperf(SiloPackage):
 
     name = "gperf"
     version = "3.1"
+    # Built with configure and make, which need a Unix shell
+    platforms = (Platform.Linux, Platform.Darwin)
 
     def source(self, src):
         src.fetch(
