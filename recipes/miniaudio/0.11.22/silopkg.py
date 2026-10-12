@@ -40,4 +40,6 @@ class Miniaudio(SiloPackage):
 
     def package(self):
         library = Component("miniaudio", headers=["include"], static_libs=["miniaudio"])
+        if self.profile.settings.os is Platform.Darwin:
+            library.frameworks += ["CoreFoundation", "CoreAudio", "AudioToolbox"]
         return Package(components=[library], licenses=["LICENSE"])
