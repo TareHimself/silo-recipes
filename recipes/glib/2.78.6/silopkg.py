@@ -1,8 +1,10 @@
 from silo import Component, Package, SiloPackage
+from silo.enums import Platform
 from silo.tools.meson import MesonBuild, MesonGenerator
 from silo.tools.pkgconfig import PkgConfigDeps
 
-TOOLS = ["glib-mkenums", "glib-genmarshal"]
+# Python scripts, named by path because they have no .exe on Windows
+TOOLS = ["bin/glib-mkenums", "bin/glib-genmarshal"]
 
 
 class Glib(SiloPackage):
@@ -16,7 +18,21 @@ class Glib(SiloPackage):
             sha256="244854654dd82c7ebcb2f8e246156d2a05eb9cd1ad07ed7a779659b4602c9fae",
         )
 
+    @property
+    def needs_intl(self) -> bool:
+        """Whether gettext has to come from a package: glibc has it, Windows and musl do not."""
+        windows = self.profile.settings.os is Platform.Windows
+        return windows or "musl" in self.profile.compiler.target
+
     def patch(self, src):
+        if self.needs_intl:
+            # Meson looks for "intl" in the C library and on the machine only, never through
+            # pkg-config, so the package is asked for under another name
+            src.replace(
+                "meson.build",
+                "libintl = dependency('intl', required: false)",
+                "libintl = dependency('libintl', required: false)",
+            )
         # distutils left Python in 3.12. The versions compared here are plain numbers.
         codegen = "gio/gdbus-2.0/codegen/utils.py"
         src.replace(codegen, "import distutils.version", "")
@@ -30,11 +46,16 @@ class Glib(SiloPackage):
         self.dep("libffi@3.4.6")
         self.dep("pcre2@10.44")
         self.dep("zlib@1.3.1")
+        if self.needs_intl:
+            self.dep("proxy-libintl@0.4")
         self.tool("meson@1")
         self.tool("pkgconf@3")
 
     def generate(self):
-        PkgConfigDeps(self, aliases={"libpcre2-8": "pcre2::pcre2-8"}).generate()
+        aliases = {"libpcre2-8": "pcre2::pcre2-8"}
+        if self.needs_intl:
+            aliases["libintl"] = "proxy-libintl::intl"
+        PkgConfigDeps(self, aliases=aliases).generate()
         meson = MesonGenerator(self)
         # glib compiles these folders in. They belong to the machine, not to this package.
         meson.set_builtin("localstatedir", "/var")
@@ -58,13 +79,14 @@ class Glib(SiloPackage):
         meson.install()
 
     def package(self):
+        windows = self.profile.settings.os is Platform.Windows
         glib = Component(
             "glib-2.0",
             headers=["include/glib-2.0", "lib/glib-2.0/include"],
             static_libs=["glib-2.0"],
             executables=TOOLS,
-            requires=["pcre2"],
-            system_libs=["m", "pthread"],
+            requires=["pcre2", "proxy-libintl"] if self.needs_intl else ["pcre2"],
+            system_libs=["ws2_32", "winmm"] if windows else ["m", "pthread"],
         )
         gmodule = Component("gmodule-2.0", static_libs=["gmodule-2.0"], requires=["glib::glib-2.0"])
         gobject = Component(
@@ -72,9 +94,9 @@ class Glib(SiloPackage):
         )
         gio = Component(
             "gio-2.0",
-            headers=["include/gio-unix-2.0"],
+            headers=["include/gio-win32-2.0" if windows else "include/gio-unix-2.0"],
             static_libs=["gio-2.0"],
             requires=["glib::gobject-2.0", "glib::gmodule-2.0", "zlib"],
-            system_libs=["resolv"],
+            system_libs=["shlwapi", "dnsapi", "iphlpapi", "ws2_32"] if windows else ["resolv"],
         )
         return Package(components=[glib, gmodule, gobject, gio], licenses=["COPYING"])
