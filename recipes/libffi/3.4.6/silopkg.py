@@ -27,5 +27,11 @@ class Libffi(SiloPackage):
         meson.install()
 
     def package(self):
-        library = Component("libffi", headers=["include"], static_libs=["ffi"])
+        library = Component(
+            "libffi",
+            headers=["include"],
+            static_libs=["ffi"],
+            # Without it MSVC takes every function in ffi.h to come from a DLL
+            defines=["FFI_STATIC_BUILD"],
+        )
         return Package(components=[library], licenses=["LICENSE"])
