@@ -1,4 +1,5 @@
 from silo import Component, Options, Package, SiloPackage
+from silo.enums import Platform
 from silo.tools.meson import MesonBuild, MesonGenerator
 from silo.tools.pkgconfig import PkgConfigDeps
 
@@ -11,6 +12,7 @@ class WaylandOptions(Options):
 class Wayland(SiloPackage[WaylandOptions]):
     name = "wayland"
     version = "1.22.0"
+    platforms = (Platform.Linux,)
     languages = ("c",)
     supports_shared = True
 

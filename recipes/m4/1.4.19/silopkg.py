@@ -1,4 +1,5 @@
 from silo import Component, Package, SiloPackage
+from silo.enums import Platform
 
 
 class M4(SiloPackage):
@@ -6,6 +7,8 @@ class M4(SiloPackage):
 
     name = "m4"
     version = "1.4.19"
+    # Built with configure and make, which need a Unix shell
+    platforms = (Platform.Linux, Platform.Darwin)
     languages = ("c",)
 
     def source(self, src):
