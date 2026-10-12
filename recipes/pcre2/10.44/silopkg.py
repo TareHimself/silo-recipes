@@ -1,4 +1,5 @@
 from silo import Component, Package, SiloPackage
+from silo.enums import Platform
 from silo.tools.cmake import CMakeBuild, CMakeGenerator
 
 
@@ -31,10 +32,12 @@ class Pcre2(SiloPackage):
         cmake.install()
 
     def package(self):
+        # On Windows upstream marks a static library in its file name
+        windows = self.profile.settings.os is Platform.Windows
         library = Component(
             "pcre2-8",
             headers=["include"],
-            static_libs=["pcre2-8"],
+            static_libs=["pcre2-8-static" if windows else "pcre2-8"],
             defines=["PCRE2_STATIC"],
         )
         return Package(components=[library], licenses=["LICENCE"])
