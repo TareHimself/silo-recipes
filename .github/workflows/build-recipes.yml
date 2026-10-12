@@ -23,7 +23,7 @@ jobs:
         with:
           repository: TareHimself/silo
           path: silo
-      - uses: astral-sh/setup-uv@v6
+      - uses: astral-sh/setup-uv@v10.3.0
 
       # A pull request builds what it reaches. A manual run builds every recipe.
       - id: plan
@@ -51,7 +51,7 @@ jobs:
         with:
           repository: TareHimself/silo
           path: silo
-      - uses: astral-sh/setup-uv@v6
+      - uses: astral-sh/setup-uv@v10.3.0
 
       - working-directory: registry
         run: uv run --project ../silo --package silo silo profile detect --matching ci/profiles/${{ matrix.profile }}.toml
