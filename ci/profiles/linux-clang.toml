@@ -1,5 +1,5 @@
 # A configuration CI builds. The runner's compiler has to be this kind and generation:
-# the major version for gcc and clang, 14.4x for MSVC.
+# the major version for gcc and clang, 14.5x for MSVC.
 [settings]
 os = "linux"
 arch = "x86_64"
