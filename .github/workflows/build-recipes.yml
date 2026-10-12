@@ -36,7 +36,7 @@ jobs:
           echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
 
   build:
-    name: ${{ matrix.recipe }} (${{ matrix.profile }})
+    name: ${{ matrix.name }} (${{ matrix.profile }})
     needs: plan
     if: ${{ fromJSON(needs.plan.outputs.matrix).include[0] != null }}
     runs-on: ${{ matrix.runner }}

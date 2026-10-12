@@ -23,6 +23,7 @@ for profile in profiles:
     for recipe in affected[profile.stem]:
         matrix.append(
             {
+                "name": "@".join(Path(recipe).parts[1:]),
                 "recipe": recipe,
                 "profile": profile.stem,
                 "runner": RUNNERS[described["settings"]["os"]],
