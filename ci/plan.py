@@ -28,6 +28,7 @@ for profile in profiles:
                 "recipe": recipe,
                 "profile": profile.stem,
                 "runner": RUNNERS[described["settings"]["os"]],
+                "apt": " ".join(described.get("ci", {}).get("apt", [])),
             }
         )
 print(json.dumps({"include": matrix}))

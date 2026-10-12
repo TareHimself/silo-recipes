@@ -53,6 +53,9 @@ jobs:
           path: silo
       - uses: astral-sh/setup-uv@v10.3.0
 
+      - if: matrix.apt != ''
+        run: sudo apt-get update && sudo apt-get install -y ${{ matrix.apt }}
+
       - working-directory: registry
         run: uv run --project ../silo --package silo silo profile detect --matching ci/profiles/${{ matrix.profile }}.toml
       - working-directory: registry
