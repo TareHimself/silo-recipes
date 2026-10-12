@@ -20,9 +20,9 @@ class Glib(SiloPackage):
 
     @property
     def needs_intl(self) -> bool:
-        """Whether gettext has to come from a package: glibc has it, Windows and musl do not."""
-        windows = self.profile.settings.os is Platform.Windows
-        return windows or "musl" in self.profile.compiler.target
+        """Whether gettext has to come from a package: only glibc has it."""
+        linux = self.profile.settings.os is Platform.Linux
+        return not linux or "musl" in self.profile.compiler.target
 
     def patch(self, src):
         if self.needs_intl:
