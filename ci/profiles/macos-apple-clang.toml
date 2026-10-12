@@ -1,0 +1,14 @@
+# A configuration CI builds. The runner's compiler has to be this kind and generation:
+# the major version for gcc and clang, 14.5x for MSVC.
+[settings]
+os = "macos"
+arch = "arm64"
+cppstd = 20
+
+[compiler]
+kind = "apple_clang"
+executable = "clang"
+cxx_executable = "clang++"
+version = "21"
+# Ends with the oldest macOS a build runs on
+target = "arm64-apple-macos26.0"

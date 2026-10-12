@@ -10,7 +10,7 @@ import tomllib
 from pathlib import Path
 
 # Named versions, not "latest", so a compiler only changes when a label here does
-RUNNERS = {"linux": "ubuntu-24.04", "windows": "windows-2025", "macos": "macos-latest"}
+RUNNERS = {"linux": "ubuntu-24.04", "windows": "windows-2025", "macos": "macos-26"}
 
 profiles = sorted(Path("ci/profiles").glob("*.toml"))
 command = ["silo", "affected", ".", *sys.argv[1:]]
