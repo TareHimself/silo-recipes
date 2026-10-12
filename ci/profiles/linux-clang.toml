@@ -3,7 +3,7 @@
 [settings]
 os = "linux"
 arch = "x86_64"
-cppstd = 17
+cppstd = 20
 
 [compiler]
 kind = "clang"
@@ -11,3 +11,8 @@ executable = "clang"
 cxx_executable = "clang++"
 version = "18"
 target = "x86_64-linux-gnu"
+
+# Read by ci/plan.py, not by silo. CMake scans C++20 sources for modules, which clang does
+# with clang-scan-deps.
+[ci]
+apt = ["clang-tools"]

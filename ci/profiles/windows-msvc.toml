@@ -3,7 +3,7 @@
 [settings]
 os = "windows"
 arch = "x86_64"
-cppstd = 17
+cppstd = 20
 
 [compiler]
 kind = "msvc"
